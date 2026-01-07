@@ -27,7 +27,7 @@ func main() {
 	if *outputPath != "" {
 		err = os.MkdirAll("dist", 0755) // Stelle sicher, dass das dist-Verzeichnis existiert
 		if err != nil {
-			log.Fatalf("❌ Fehler beim Erstellen des dist-Verzeichnisses: %v", err)
+			log.Fatalf("❌ Fehler beim Erstellen des dist-Verzeichnisses: %v ", err)
 		}
 		err = os.WriteFile(*outputPath, code, 0644)
 		if err != nil {
@@ -35,7 +35,6 @@ func main() {
 		}
 		log.Printf("✅ Code nach %s geschrieben (%d Bytes)\n", *outputPath, len(code))
 	}
-
 	// 3. Optional: Direkt an Shelly deployen
 	if *deployURL != "" {
 		err = deployer.DeployToShelly(code, *deployURL)
