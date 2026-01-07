@@ -10,15 +10,28 @@ import (
 )
 
 func main() {
-	// CLI-Flags
-	noMinify := flag.Bool("no-minify", false, "Deaktiviert Minifizierung (für Debugging)") // NEU!
-	entryPath := flag.String("entry", "main.js", "Eingabeskript (z. B. scripts/main.js)")
-	outputPath := flag.String("out", "dist/main.js", "Ausgabepfad (optional, standardmäßig dist/main.js)")
-	deployURL := flag.String("deploy", "", "Shelly-URL für direktes Deployment (optional)")
+	// ------------------- Flags -------------------
+	noMinify := flag.Bool("no-minify", false,
+		"Deaktiviert Minifizierung (für Debugging)")
+	outputPath := flag.String("out", "dist/main.js",
+		"Ausgabepfad (optional, standardmäßig dist/main.js)")
+	deployURL := flag.String("deploy", "",
+		"Shelly-URL für direktes Deployment (optional)")
+
+	// Parse nur die Optionen (alles, das mit '-' beginnt)
 	flag.Parse()
 
+	// ------------------- Entry‑Datei -------------------
+	// Standardwert:
+	entryPath := "main.js"
+
+	// Wenn ein Positions‑Argument vorhanden ist, dieses übernehmen
+	if args := flag.Args(); len(args) > 0 && args[0] != "" {
+		entryPath = args[0] // erstes Argument überschreibt den Default
+	}
+
 	// 1. Code transpilieren
-	code, err := builder.BuildShellyScript(*entryPath, !*noMinify)
+	code, err := builder.BuildShellyScript(entryPath, !*noMinify)
 	if err != nil {
 		log.Fatalf("❌ Build fehlgeschlagen: %v", err)
 	}
