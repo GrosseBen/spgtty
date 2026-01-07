@@ -1,63 +1,47 @@
 package main
 
 import (
-	"fmt"
+	"flag"
 	"log"
 	"os"
-	"regexp"
 
-	"github.com/evanw/esbuild/pkg/api"
+	"github.com/GrosseBen/spgtty/pkg/builder"
+	"github.com/GrosseBen/spgtty/pkg/deployer"
 )
 
-// BuildShellyScript transpiliert JavaScript für Shelly-Geräte (Gen 2+)
-// und schreibt das Ergebnis in `dist/main.js`.
-func BuildShellyScript(entryPoint, outputPath string) error {
-	// 1. Esbuild-Konfiguration (mit Dateiausgabe)
-	result := api.Build(api.BuildOptions{
-		EntryPoints:       []string{entryPoint},
-		Bundle:            true,
-		Target:            api.ES2015, // Niedrigste unterstützte Version
-		MinifyIdentifiers: true,
-		MinifySyntax:      true,
-		MinifyWhitespace:  true,
-		Outfile:           outputPath, // Ziel: dist/main.js
-		Write:             true,       // Schreibe direkt in Datei
-	})
-
-	// 2. Fehlerbehandlung (ohne nested ifs)
-	if len(result.Errors) > 0 {
-		for _, err := range result.Errors {
-			log.Printf("❌ Esbuild-Fehler: %v\n", err)
-		}
-		return fmt.Errorf("esbuild fehlgeschlagen")
-	}
-
-	// 3. Post-Processing: Hängende Kommas entfernen (direkt in der Datei)
-	jsCode, err := os.ReadFile(outputPath)
-	if err != nil {
-		return fmt.Errorf("Fehler beim Lesen der Datei: %v", err)
-	}
-
-	re := regexp.MustCompile(`,[\s]*([}\]])`)
-	cleanedCode := re.ReplaceAll(jsCode, []byte("$1"))
-
-	// 4. Überschreibe die Datei mit dem bereinigten Code
-	err = os.WriteFile(outputPath, cleanedCode, 0644)
-	if err != nil {
-		return fmt.Errorf("Fehler beim Schreiben der Datei: %v", err)
-	}
-
-	log.Printf("✅ Erfolg! Code nach %s geschrieben (Größe: %d Bytes)\n", outputPath, len(cleanedCode))
-	return nil
-}
-
 func main() {
-	// 1. Code transpilieren und in dist/main.js schreiben
-	err := BuildShellyScript("main.js", "dist/main.js")
+	// CLI-Flags
+	noMinify := flag.Bool("no-minify", false, "Deaktiviert Minifizierung (für Debugging)") // NEU!
+	entryPath := flag.String("entry", "main.js", "Eingabeskript (z. B. scripts/main.js)")
+	outputPath := flag.String("out", "dist/main.js", "Ausgabepfad (optional, standardmäßig dist/main.js)")
+	deployURL := flag.String("deploy", "", "Shelly-URL für direktes Deployment (optional)")
+	flag.Parse()
+
+	// 1. Code transpilieren
+	code, err := builder.BuildShellyScript(*entryPath, !*noMinify)
 	if err != nil {
-		log.Fatalf("❌ Fehler: %v", err)
+		log.Fatalf("❌ Build fehlgeschlagen: %v", err)
 	}
 
-	// 2. Optional: Code direkt an Shelly deployen (z. B. per HTTP)
-	// Beispiel: err = DeployToShelly("dist/main.js", "http://shelly-gen2-local/rpc")
+	// 2. Optional: In Datei schreiben
+	if *outputPath != "" {
+		err = os.MkdirAll("dist", 0755) // Stelle sicher, dass das dist-Verzeichnis existiert
+		if err != nil {
+			log.Fatalf("❌ Fehler beim Erstellen des dist-Verzeichnisses: %v", err)
+		}
+		err = os.WriteFile(*outputPath, code, 0644)
+		if err != nil {
+			log.Fatalf("❌ Fehler beim Schreiben der Datei: %v", err)
+		}
+		log.Printf("✅ Code nach %s geschrieben (%d Bytes)\n", *outputPath, len(code))
+	}
+
+	// 3. Optional: Direkt an Shelly deployen
+	if *deployURL != "" {
+		err = deployer.DeployToShelly(code, *deployURL)
+		if err != nil {
+			log.Fatalf("❌ Deployment fehlgeschlagen: %v", err)
+		}
+		log.Printf("🚀 Code erfolgreich an %s gesendet!\n", *deployURL)
+	}
 }
