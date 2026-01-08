@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"os"
 
@@ -25,8 +24,7 @@ func main() {
 	flag.Parse()
 
 	if *version {
-		v := utils.Version()
-		fmt.Println("spgtty in " + v)
+		utils.PrintVersion()
 		os.Exit(0)
 	}
 	// ------------------- Entry‑Datei -------------------
