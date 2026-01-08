@@ -12,6 +12,8 @@ func version() string {
 }
 
 func PrintVersion() {
-	v := version()
-	fmt.Println("spgtty in " + v)
+	bi, _ := debug.ReadBuildInfo()
+	fmt.Println(bi.Main.Version)
+	fmt.Println("of " + bi.Main.Path + " compiled in " + bi.GoVersion)
+	//fmt.Println(bi.Path)
 }
