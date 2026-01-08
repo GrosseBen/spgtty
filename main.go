@@ -2,11 +2,13 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"os"
 
 	"github.com/GrosseBen/spgtty/pkg/builder"
 	"github.com/GrosseBen/spgtty/pkg/deployer"
+	"github.com/GrosseBen/spgtty/pkg/utils"
 )
 
 func main() {
@@ -17,10 +19,16 @@ func main() {
 		"Ausgabepfad (optional, standardmäßig dist/main.js)")
 	deployURL := flag.String("deploy", "",
 		"Shelly-URL für direktes Deployment (optional)")
-
+	version := flag.Bool("v", false,
+		"shows the version)")
 	// Parse nur die Optionen (alles, das mit '-' beginnt)
 	flag.Parse()
 
+	if *version {
+		v := utils.Version()
+		fmt.Println("spgtty in " + v)
+		os.Exit(0)
+	}
 	// ------------------- Entry‑Datei -------------------
 	// Standardwert:
 	entryPath := "main.js"
@@ -29,7 +37,6 @@ func main() {
 	if args := flag.Args(); len(args) > 0 && args[0] != "" {
 		entryPath = args[0] // erstes Argument überschreibt den Default
 	}
-
 	// 1. Code transpilieren
 	code, err := builder.BuildShellyScript(entryPath, !*noMinify)
 	if err != nil {
@@ -56,4 +63,5 @@ func main() {
 		}
 		log.Printf("🚀 Code erfolgreich an %s gesendet!\n", *deployURL)
 	}
+
 }
