@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/GrosseBen/spgtty/pkg/builder"
-	"github.com/GrosseBen/spgtty/pkg/deployer"
 	"github.com/GrosseBen/spgtty/pkg/utils"
 )
 
@@ -16,8 +15,6 @@ func main() {
 		"Deaktiviert Minifizierung (für Debugging)")
 	outputPath := flag.String("out", "dist/main.js",
 		"Ausgabepfad (optional, standardmäßig dist/main.js)")
-	deployURL := flag.String("deploy", "",
-		"Shelly-URL für direktes Deployment (optional)")
 	version := flag.Bool("v", false,
 		"shows the version)")
 	// Parse nur die Optionen (alles, das mit '-' beginnt)
@@ -53,13 +50,4 @@ func main() {
 		}
 		log.Printf("✅ Code nach %s geschrieben (%d Bytes)\n", *outputPath, len(code))
 	}
-	// 3. Optional: Direkt an Shelly deployen
-	if *deployURL != "" {
-		err = deployer.DeployToShelly(code, *deployURL)
-		if err != nil {
-			log.Fatalf("❌ Deployment fehlgeschlagen: %v", err)
-		}
-		log.Printf("🚀 Code erfolgreich an %s gesendet!\n", *deployURL)
-	}
-
 }
