@@ -15,7 +15,7 @@ After a veiw houres of learing ShellyApis via playing arraound, i found me in a
 coppy and past action with IDE, Git and a mose driven way of combinig parts of code
 into shallys web UI. With a set of "OK this I will coppy always in front" of my code...
 By creating a m(a/e)ss of spagetty code. One Stepp back and a cooffe later
-the idea of spgtty was born, lets do this a tool.
+the idea of **spgtty** was born, lets do this a tool.
 
 **Solution:** `spgtty` (pronounced *"spaghetti"*) – your CLI tool that:
 - **Automatically generates** Shelly scripts from projects of Js or ts structures
@@ -75,5 +75,5 @@ Want to help? Awesome!
 
 ## ⚠️ Important:
 
-This is a hobby project. If it crashes, resart  shally and file a Bug.
-Target: Shelly Gen 2+ (because older ones don’t support scripting).
+- This is a hobby project. If it crashes, resart  shally and file a Bug.
+- **Target: Shelly Gen 2+** (because older ones don’t support scripting).
