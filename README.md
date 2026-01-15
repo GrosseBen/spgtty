@@ -29,10 +29,20 @@ files—*after* turning it into glorious spaghetti 🍝).
 ## **Installation**
 Just grab it with go (because we don’t want Node.js bloat, Benjamin):
 ```bash
-go get github.com/GrosseBen/spgtty
+go install github.com/GrosseBen/spgtty
 ```
 
 (Prerequisite: Go installed. If not, go.dev/dl.)
+
+or without go bur brew needed:
+```bash
+brew install GrosseBen/spgtty/spgtty
+```
+
+or
+
+download []()
+
 
 ## Features
 Currently, spgtty can:
