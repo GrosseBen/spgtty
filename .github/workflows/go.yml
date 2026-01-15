@@ -27,10 +27,6 @@ jobs:
           - os: linux
             arch: arm64
             name: linux-arm64
-          - os: linux
-            arch: arm
-            name: linux-arm32
-            goarm: "7"
           # Windows
           - os: windows
             arch: amd64
