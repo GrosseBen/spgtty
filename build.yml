@@ -1,8 +1,10 @@
 name: Build & Release
 
 on:
+  workflow_dispatch:
   push:
     tags: ["v*"]
+    branches: ["main"] # Nur auf dem main-Branch
 
 jobs:
   build:
