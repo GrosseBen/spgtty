@@ -7,7 +7,7 @@ on:
     branches: ["main"]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -81,7 +81,7 @@ jobs:
     # run release only for tag pushes; depend on build so artifacts from all matrix jobs are available
     needs: build
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     steps:
       - name: Download all build artifacts
         uses: actions/download-artifact@v4
