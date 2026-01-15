@@ -48,19 +48,17 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          # Dateiendung für Windows
           if [ "${{ matrix.os }}" = "windows" ]; then
             ext=".exe"
           else
             ext=""
           fi
-          # GOARM nur setzen, wenn vorhanden
           export GOOS=${{ matrix.os }}
           export GOARCH=${{ matrix.arch }}
           export GOARM=${{ matrix.goarm || '' }}
           out="spgtty-${{ matrix.name }}$ext"
           echo "Building ${out} (GOOS=$GOOS GOARCH=$GOARCH GOARM=$GOARM)"
-          go build -v -o "${out}" -ldflags="-s -w" ./...
+          go build -v -o "${out}" .  # ← Hier den Pfad zu deinem MAIN-Paket angeben!
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
