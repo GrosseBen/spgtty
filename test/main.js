@@ -1,3 +1,2 @@
-// try to be deployed
-
+// main.js
 print("hello Shelly");
