@@ -37,6 +37,13 @@ var uploadCmd = &cobra.Command{
 	Run:   upload, // Hier wird deine 'upload'-Funktion als Run-Feld zugewiesen
 }
 
+var initCmd = &cobra.Command{
+	Use:   "init", // Der Name des Unterbefehls, den der Benutzer eingibt (z.B. "yourcli upload")
+	Short: "create a new JS poject for shally Gen2+",
+	Long:  `create a new JS poject for shally Gen2+`,
+	Run:   initProj, // Hier wird deine 'upload'-Funktion als Run-Feld zugewiesen
+}
+
 func init() {
 	//entryPath := "main.js"
 	// Here you will define your flags and configuration settings.
@@ -45,6 +52,7 @@ func init() {
 	//
 
 	rootCmd.AddCommand(uploadCmd)
+	rootCmd.AddCommand(initCmd)
 
 	//rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.spgtty.yaml)")
 
