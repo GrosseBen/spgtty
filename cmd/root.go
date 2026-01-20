@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/GrosseBen/spgtty/pkg/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -14,10 +15,25 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "spgtty",
 	Short: "Translates your js code in a Spagetty monster for Shally devices",
-	Long: `To enabele development fo more compley Js aplications for Shally devices
-
+	Long: `To enabele development fo more compley Js aplications for Shally devices,
 spgtty is a CLI tool that empowers developers to bundle complex, multifile applications, minmised and bundeld to one Fiel.
 so that you could upload it to Shally Gen2+ Device`,
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		// Korrektur: PersistentFlags() statt Flags() verwenden, um persistente Flags abzufragen
+		versionFlag, err := cmd.PersistentFlags().GetBool("version")
+		if err != nil {
+			// Falls ein Fehler beim Abrufen des Flags auftritt, gib ihn zurück.
+			// Dies kann passieren, wenn das Flag nicht existiert oder der Typ falsch ist.
+			return fmt.Errorf("Fehler beim Abrufen des 'version'-Flags: %w", err)
+		}
+		if versionFlag {
+			utils.PrintVersion()
+			os.Exit(0) // Beendet das Programm, nachdem die Version angezeigt wurde
+		}
+		// Wichtig: Hier nil zurückgeben, damit die Ausführung fortgesetzt wird,
+		// wenn das Flag nicht gesetzt ist und keine Version angezeigt werden soll.
+		return nil
+	},
 	Run: build,
 }
 
@@ -56,18 +72,9 @@ var initCmd = &cobra.Command{
 	Run:   initProj, // Hier wird deine 'upload'-Funktion als Run-Feld zugewiesen
 }
 
-var versionCmd = &cobra.Command{
-	Use:     "version", // Der Name des Unterbefehls
-	Aliases: []string{"-v"},
-	Short:   "shows actual version",
-	Long:    `shows the verson and build parameters`,
-	Run:     version, // Hier wird deine 'upload'-Funktion als Run-Feld zugewiesen
-}
-
 func init() {
 	rootCmd.AddCommand(uploadCmd)
 	rootCmd.AddCommand(initCmd)
-	rootCmd.AddCommand(versionCmd)
 	rootCmd.AddCommand(buildCmd)
 	rootCmd.PersistentFlags().BoolP("version", "v", false, "shows the version and build parameters")
 	rootCmd.Flags().BoolP("notMinimize", "m", false, "do not minimize e.g. for debugging")
