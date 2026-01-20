@@ -9,24 +9,29 @@ import (
 )
 
 func build(cmd *cobra.Command, args []string) {
-	noMinify := true
-	entryPath := "main.js"
-	outPath := "dist/main.js"
-	code, err := builder.BuildShellyScript(entryPath, !noMinify)
-
+	var scriptName string
+	log.Println("args: ", args)
+	// Temp for have something
+	if len(args) == 0 {
+		args = append(args, "main.js")
+	}
+	scriptName = args[len(args)-1]
+	outPath := "./dist/"
+	noMinify := false
+	code, err := builder.BuildShellyScript(args[0], noMinify)
 	if err != nil {
 		log.Fatalf("Bulild failed %v ", err)
 	}
 
 	// 2. Optional: In Datei schreiben
-	err = os.MkdirAll("dist", 0755) // Stelle sicher, dass das dist-Verzeichnis existiert
+	err = os.MkdirAll(outPath, 0755) // Stelle sicher, dass das dist-Verzeichnis existiert
 	if err != nil {
 		log.Fatalf("❌ Fehler beim Erstellen des dist-Verzeichnisses: %v ", err)
 	}
-	err = os.WriteFile(outPath, code, 0644)
+	err = os.WriteFile(outPath+scriptName, code, 0644)
 	if err != nil {
 		log.Fatalf("❌ Fehler beim Schreiben der Datei: %v", err)
 	}
 
-	log.Printf("✅ Code nach %s geschrieben (%d Bytes)\n", outPath, len(code))
+	log.Printf("✅ Code nach %s geschrieben (%d Bytes)\n", outPath+scriptName, len(code))
 }

@@ -8,8 +8,15 @@ import (
 	"github.com/evanw/esbuild/pkg/api"
 )
 
+func BuildShellyScript(entryPath string, minify bool) ([]byte, error) {
+	if entryPath == "" {
+		entryPath = "main.js"
+	}
+	return buildShellyScript(entryPath, minify)
+}
+
 // BuildShellyScript transpiliert JavaScript für Shelly-Geräte (Gen 2+)
-func BuildShellyScript(entryPath string, minify bool) ([]byte, error) { // minify-Parameter hinzugefügt
+func buildShellyScript(entryPath string, minify bool) ([]byte, error) { // minify-Parameter hinzugefügt
 	_, err := os.Stat(entryPath)
 	if err != nil {
 		println(err.Error())

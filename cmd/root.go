@@ -4,6 +4,7 @@ Copyright © 2026 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -23,10 +24,21 @@ so that you could upload it to Shally Gen2+ Device`,
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	err := rootCmd.Execute()
-	if err != nil {
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Fprintf(os.Stderr, "Fehler beim Ausführen des Kommandos: %s\n", err)
 		os.Exit(1)
 	}
+}
+
+var buildCmd = &cobra.Command{
+	Use:   "build",
+	Short: "Translates your js code in a Spagetty monster for Shally devices",
+	Long: `To enabele development fo more compley Js aplications for Shally devices
+
+spgtty is a CLI tool that empowers developers to bundle complex, multifile applications, minmised and bundeld to one Fiel.
+so that you could upload it to Shally Gen2+ Device`,
+	Args: cobra.MaximumNArgs(1),
+	Run:  build,
 }
 
 // Definiere dein Cobra-Befehlsobjekt für den Upload
@@ -44,29 +56,19 @@ var initCmd = &cobra.Command{
 	Run:   initProj, // Hier wird deine 'upload'-Funktion als Run-Feld zugewiesen
 }
 
-var VersionCmd = &cobra.Command{
+var versionCmd = &cobra.Command{
 	Use:     "version", // Der Name des Unterbefehls
 	Aliases: []string{"-v"},
-	Short:   "shows actual versionx",
+	Short:   "shows actual version",
 	Long:    `shows the verson and build parameters`,
 	Run:     version, // Hier wird deine 'upload'-Funktion als Run-Feld zugewiesen
 }
 
 func init() {
-	//entryPath := "main.js"
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-	//
-
 	rootCmd.AddCommand(uploadCmd)
 	rootCmd.AddCommand(initCmd)
-	rootCmd.AddCommand(VersionCmd)
+	rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(buildCmd)
 	rootCmd.PersistentFlags().BoolP("version", "v", false, "shows the version and build parameters")
-
-	//rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.spgtty.yaml)")
-
-	//Cobra also supports local flags, which will only run
-	//when this action is called directly.
-	rootCmd.Flags().BoolP("-notMinimize", "m", false, "do not minimize e.g. for debugging")
+	rootCmd.Flags().BoolP("notMinimize", "m", false, "do not minimize e.g. for debugging")
 }
