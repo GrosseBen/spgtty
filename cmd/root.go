@@ -5,10 +5,16 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/GrosseBen/spgtty/pkg/utils"
 	"github.com/spf13/cobra"
+)
+
+var (
+	versionFlagValue     bool // Speichert den Wert für --version / -v
+	notMinimizeFlagValue bool // Speichert den Wert für --notMinimize / -m
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -19,7 +25,6 @@ var rootCmd = &cobra.Command{
 spgtty is a CLI tool that empowers developers to bundle complex, multifile applications, minmised and bundeld to one Fiel.
 so that you could upload it to Shally Gen2+ Device`,
 	PreRunE: func(cmd *cobra.Command, args []string) error {
-		// Korrektur: PersistentFlags() statt Flags() verwenden, um persistente Flags abzufragen
 		versionFlag, err := cmd.PersistentFlags().GetBool("version")
 		if err != nil {
 			// Falls ein Fehler beim Abrufen des Flags auftritt, gib ihn zurück.
@@ -30,8 +35,12 @@ so that you could upload it to Shally Gen2+ Device`,
 			utils.PrintVersion()
 			os.Exit(0) // Beendet das Programm, nachdem die Version angezeigt wurde
 		}
-		// Wichtig: Hier nil zurückgeben, damit die Ausführung fortgesetzt wird,
-		// wenn das Flag nicht gesetzt ist und keine Version angezeigt werden soll.
+
+		notMinimizeFlagValue, err = cmd.PersistentFlags().GetBool("notMinimize")
+		if err != nil {
+			log.Fatalf("notMinimize failed %v ", err)
+		}
+
 		return nil
 	},
 	Run: build,
@@ -76,6 +85,8 @@ func init() {
 	rootCmd.AddCommand(uploadCmd)
 	rootCmd.AddCommand(initCmd)
 	rootCmd.AddCommand(buildCmd)
-	rootCmd.PersistentFlags().BoolP("version", "v", false, "shows the version and build parameters")
-	rootCmd.Flags().BoolP("notMinimize", "m", false, "do not minimize e.g. for debugging")
+
+	// Flags an die Paket-Variablen binden
+	rootCmd.PersistentFlags().BoolVarP(&versionFlagValue, "version", "v", false, "shows the version and build parameters")
+	rootCmd.PersistentFlags().BoolVarP(&notMinimizeFlagValue, "notMinimize", "m", false, "do not minimize e.g. for debugging")
 }

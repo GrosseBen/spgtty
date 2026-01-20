@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -10,15 +11,13 @@ import (
 
 func build(cmd *cobra.Command, args []string) {
 	var scriptName string
-	log.Println("args: ", args)
-	// Temp for have something
 	if len(args) == 0 {
 		args = append(args, "main.js")
 	}
+	var err error
 	scriptName = args[len(args)-1]
 	outPath := "./dist/"
-	noMinify := false
-	code, err := builder.BuildShellyScript(args[0], noMinify)
+	code, err := builder.BuildShellyScript(args[0], !notMinimizeFlagValue)
 	if err != nil {
 		log.Fatalf("Bulild failed %v ", err)
 	}
@@ -34,4 +33,6 @@ func build(cmd *cobra.Command, args []string) {
 	}
 
 	log.Printf("✅ Code nach %s geschrieben (%d Bytes)\n", outPath+scriptName, len(code))
+	fmt.Printf("Building script from: %s\n", scriptName)
+	fmt.Printf("Minimizing: %t\n", !notMinimizeFlagValue) // Zeigt an, ob minimiert wird
 }
