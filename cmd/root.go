@@ -44,6 +44,14 @@ var initCmd = &cobra.Command{
 	Run:   initProj, // Hier wird deine 'upload'-Funktion als Run-Feld zugewiesen
 }
 
+var VersionCmd = &cobra.Command{
+	Use:     "version", // Der Name des Unterbefehls
+	Aliases: []string{"-v"},
+	Short:   "shows actual versionx",
+	Long:    `shows the verson and build parameters`,
+	Run:     version, // Hier wird deine 'upload'-Funktion als Run-Feld zugewiesen
+}
+
 func init() {
 	//entryPath := "main.js"
 	// Here you will define your flags and configuration settings.
@@ -53,6 +61,8 @@ func init() {
 
 	rootCmd.AddCommand(uploadCmd)
 	rootCmd.AddCommand(initCmd)
+	rootCmd.AddCommand(VersionCmd)
+	rootCmd.PersistentFlags().BoolP("version", "v", false, "shows the version and build parameters")
 
 	//rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.spgtty.yaml)")
 
