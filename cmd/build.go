@@ -14,6 +14,10 @@ func build(cmd *cobra.Command, args []string) {
 	outPath := "dist/main.js"
 	code, err := builder.BuildShellyScript(entryPath, !noMinify)
 
+	if err != nil {
+		log.Fatalf("Bulild failed %v ", err)
+	}
+
 	// 2. Optional: In Datei schreiben
 	err = os.MkdirAll("dist", 0755) // Stelle sicher, dass das dist-Verzeichnis existiert
 	if err != nil {

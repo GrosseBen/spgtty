@@ -2,6 +2,7 @@ package builder
 
 import (
 	"fmt"
+	"os"
 	"regexp"
 
 	"github.com/evanw/esbuild/pkg/api"
@@ -9,6 +10,11 @@ import (
 
 // BuildShellyScript transpiliert JavaScript für Shelly-Geräte (Gen 2+)
 func BuildShellyScript(entryPath string, minify bool) ([]byte, error) { // minify-Parameter hinzugefügt
+	_, err := os.Stat(entryPath)
+	if err != nil {
+		println(err.Error())
+		return nil, err
+	}
 	// Esbuild-Konfiguration (mit dynamischer Minifizierung)
 	result := api.Build(api.BuildOptions{
 		EntryPoints:       []string{entryPath},
@@ -34,5 +40,5 @@ func BuildShellyScript(entryPath string, minify bool) ([]byte, error) { // minif
 	re := regexp.MustCompile(`,[\s]*([}\]])`)
 	cleanedCode := re.ReplaceAll(jsCode, []byte("$1"))
 
-	return cleanedCode, nil
+	return cleanedCode, err
 }
