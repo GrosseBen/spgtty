@@ -1,3 +1,3 @@
-// try to be deployed
-
-print("hello Shelly");
+// main.js
+const nameOfProduct = "Selly Gen2++";
+print("hello ", nameOfProduct);
