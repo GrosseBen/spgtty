@@ -53,7 +53,8 @@ or with any subcommand (e.g., 'spgtty build -m <file>').`,
 
 		return nil
 	},
-	Run: build,
+	Run:  build,
+	Args: cobra.MaximumNArgs(1),
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

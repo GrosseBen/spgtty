@@ -5,5 +5,5 @@ import (
 )
 
 func initProj(cmd *cobra.Command, args []string) {
-	panic("upload not jet inmplemented")
+	panic("init not jet inmplemented")
 }
