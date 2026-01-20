@@ -9,6 +9,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var buildCmd = &cobra.Command{
+	Use:   "build",
+	Short: "Translates your js code in a Spagetty monster for Shally devices",
+	Long: `To enabele development fo more compley Js aplications for Shally devices
+
+spgtty is a CLI tool that empowers developers to bundle complex, multifile applications, minmised and bundeld to one Fiel.
+so that you could upload it to Shally Gen2+ Device`,
+	Args: cobra.MaximumNArgs(1),
+	Run:  build,
+}
+
 func build(cmd *cobra.Command, args []string) {
 	var scriptName string
 	if len(args) == 0 {

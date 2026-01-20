@@ -5,11 +5,8 @@ package cmd
 
 import (
 	"fmt"
-	"log"
-	"os"
-
-	"github.com/GrosseBen/spgtty/pkg/utils"
 	"github.com/spf13/cobra"
+	"os"
 )
 
 var (
@@ -26,35 +23,17 @@ var rootCmd = &cobra.Command{
 #######################################################
 
 To enabele development fo more compley Js aplications for Shally devices,
-spgtty is a CLI tool that empowers developers to bundle complex, multifile applications, minmised and bundeld to one Fiel.
-so that you could upload it to Shally Gen2+ Device
+spgtty is a CLI tool that empowers developers to bundle complex, multifile applications,
+minmised and bundeld to one File, so that you could upload it to Shally Gen2+ Device
 
 If no subcommand is given, 'spgtty' will attempt to build the current project.
 You can also explicitly use 'spgtty build <source_file>'.
 
 You can use flags like '-v' or '-m' directly with 'spgtty' (e.g., 'spgtty -v')
 or with any subcommand (e.g., 'spgtty build -m <file>').`,
-	PreRunE: func(cmd *cobra.Command, args []string) error {
-		versionFlag, err := cmd.PersistentFlags().GetBool("version")
-		if err != nil {
-			// Falls ein Fehler beim Abrufen des Flags auftritt, gib ihn zurück.
-			// Dies kann passieren, wenn das Flag nicht existiert oder der Typ falsch ist.
-			return fmt.Errorf("Fehler beim Abrufen des 'version'-Flags: %w", err)
-		}
-		if versionFlag {
-			utils.PrintVersion()
-			os.Exit(0) // Beendet das Programm, nachdem die Version angezeigt wurde
-		}
-
-		notMinimizeFlagValue, err = cmd.PersistentFlags().GetBool("notMinimize")
-		if err != nil {
-			log.Fatalf("notMinimize failed %v ", err)
-		}
-
-		return nil
-	},
-	Run:  build,
-	Args: cobra.MaximumNArgs(1),
+	PreRunE: version,
+	Run:     build,
+	Args:    cobra.MaximumNArgs(1),
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -64,32 +43,6 @@ func Execute() {
 		fmt.Fprintf(os.Stderr, "Fehler beim Ausführen des Kommandos: %s\n", err)
 		os.Exit(1)
 	}
-}
-
-var buildCmd = &cobra.Command{
-	Use:   "build",
-	Short: "Translates your js code in a Spagetty monster for Shally devices",
-	Long: `To enabele development fo more compley Js aplications for Shally devices
-
-spgtty is a CLI tool that empowers developers to bundle complex, multifile applications, minmised and bundeld to one Fiel.
-so that you could upload it to Shally Gen2+ Device`,
-	Args: cobra.MaximumNArgs(1),
-	Run:  build,
-}
-
-// Definiere dein Cobra-Befehlsobjekt für den Upload
-var uploadCmd = &cobra.Command{
-	Use:   "upload", // Der Name des Unterbefehls, den der Benutzer eingibt (z.B. "yourcli upload")
-	Short: "Uploads files to a specified destination",
-	Long:  `This command handles the uploading of various file types to a remote server or service.`,
-	Run:   upload, // Hier wird deine 'upload'-Funktion als Run-Feld zugewiesen
-}
-
-var initCmd = &cobra.Command{
-	Use:   "init", // Der Name des Unterbefehls, den der Benutzer eingibt (z.B. "yourcli upload")
-	Short: "create a new JS poject for shally Gen2+",
-	Long:  `create a new JS poject for shally Gen2+`,
-	Run:   initProj, // Hier wird deine 'upload'-Funktion als Run-Feld zugewiesen
 }
 
 func init() {
