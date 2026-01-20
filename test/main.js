@@ -1,2 +1,3 @@
 // main.js
-print("hello Shelly");
+const nameOfProduct = "Selly Gen2++";
+print("hello ", nameOfProduct);
