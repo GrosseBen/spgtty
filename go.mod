@@ -13,4 +13,4 @@ require (
 )
 
 // Korrekte Syntax für replace (ohne Versionsnummer!)
-replace github.com/GrosseBen/spgtty => .
+replace github.com/GrosseBen/spgtty => ./
