@@ -4,9 +4,11 @@ Copyright © 2026 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	_ "embed"
 	"fmt"
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
 )
 
 var (
@@ -14,23 +16,14 @@ var (
 	notMinimizeFlagValue bool // Speichert den Wert für --notMinimize / -m
 )
 
+//go:embed "LongDescription.txt"
+var long string
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "spgtty",
-	Short: "Translates your js code in a Spagetty monster for Shally devices",
-	Long: `
-  SPGTTY - easy Shally script spagetty code handleing
-#######################################################
-
-To enabele development fo more compley Js aplications for Shally devices,
-spgtty is a CLI tool that empowers developers to bundle complex, multifile applications,
-minmised and bundeld to one File, so that you could upload it to Shally Gen2+ Device
-
-If no subcommand is given, 'spgtty' will attempt to build the current project.
-You can also explicitly use 'spgtty build <source_file>'.
-
-You can use flags like '-v' or '-m' directly with 'spgtty' (e.g., 'spgtty -v')
-or with any subcommand (e.g., 'spgtty build -m <file>').`,
+	Use:     "spgtty",
+	Short:   "Translates your js code in a Spagetty monster for Shally devices",
+	Long:    long,
 	PreRunE: version,
 	Run:     build,
 	Args:    cobra.MaximumNArgs(1),

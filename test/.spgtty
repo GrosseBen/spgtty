@@ -1,0 +1,6 @@
+{
+  "device": "shellyplus1pm-123456",  // Wird für mDNS genutzt (z.B. shellyplus1pm-123456.local)
+  "ip": "192.168.33.1",             // Optional: Überschreibt DNS, falls angegeben
+  "minified": false,
+  "scriptId": 1
+}

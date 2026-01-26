@@ -1,0 +1,14 @@
+
+#######################################################
+  SPGTTY - easy Shally script spagetty code handleing
+#######################################################
+
+To enabele development fo more compley Js aplications for Shally devices,
+spgtty is a CLI tool that empowers developers to bundle complex, multifile applications,
+minmised and bundeld to one File, so that you could upload it to Shally Gen2+ Device
+
+If no subcommand is given, 'spgtty' will attempt to build the current project.
+You can also explicitly use 'spgtty build <source_file>'.
+
+You can use flags like '-v' or '-m' directly with 'spgtty' (e.g., 'spgtty -v')
+or with any subcommand (e.g., 'spgtty build -m <file>').

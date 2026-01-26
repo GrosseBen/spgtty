@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 
 	"github.com/spf13/cobra"
@@ -20,5 +21,6 @@ var uploadCmd = &cobra.Command{
 func upload(cmd *cobra.Command, args []string) {
 	j, _ := json.Marshal(args)
 	log.Println("upload ", string(j))
-	panic("upload not jet inmplemented")
+	// Use the config for uploading
+	fmt.Printf("Uploading to device %s with IP %s, minified: %t, script ID: %d\n", config.Device, config.IP, config.Minified, config.ScriptID)
 }
