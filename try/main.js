@@ -1,7 +1,12 @@
 // Shelly Gen2+ JavaScript example
 // This is a basic example to get you started
 
-print("Hello from Shelly device: " + Shelly.getDeviceInfo().id);
+const AGrateGreeting = "Hello from Shelly device: ";
+function sayHello() {
+  print(AGrateGreeting + Shelly.getDeviceInfo().id);
+}
+
+sayHello();
 
 // Example: Toggle relay 0 every 5 seconds
 // Timer.set(5000, true, function() {

@@ -1,17 +1,24 @@
-build:
-    @echo "Building project..."
-    @go build .
-test:
-    @echo "Running tests..."
-    @go test -v ./...
-try:
-    cd ./try
-    $(pwd)/spgtty init --device shellyplus1pm-demo
-    $(pwd)/spgtty build
+# spgtty build system
+# Usage:
+#   just build    - Build the spgtty binary
+#   just test     - Run Go tests
+#   just try      - Try spgtty in the isolated try directory
+#   just clean    - Clean up the try directory
 
-    echo "Build output:"
-    cat ./dist/main.js
+build:
+    @echo "🔨 Building spgtty..."
+    @go build .
+
+test:
+    @echo "🧪 Running tests..."
+    @go test -v ./...
+
+try:
+    @echo "🚀 Trying spgtty in isolated workspace..."
+    bash -c "cd try && /Users/ludal/src/github.com/GrosseBen/spgtty/spgtty init --device shellyplus1pm-demo && /Users/ludal/src/github.com/GrosseBen/spgtty/spgtty build && echo '📄 Build output:' && cat dist/main.js"
+
 clean:
+    @echo "🧹 Cleaning try directory..."
     rm -rf ./try/dist
-    rm -rd .spgtty
     rm -rf ./try/.spgtty
+    @echo "✅ Try directory cleaned!"
