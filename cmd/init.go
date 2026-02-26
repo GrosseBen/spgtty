@@ -70,7 +70,7 @@ func initProj(cmd *cobra.Command, args []string) {
 		fmt.Printf("⚠️  Warning: Could not create dist directory: %v\n", err)
 	}
 	
-	// Create example main.js file
+	// Create example main.js file only if it doesn't exist
 	exampleJS := `// Shelly Gen2+ JavaScript example
 // This is a basic example to get you started
 
@@ -83,14 +83,24 @@ print("Hello from Shelly device: " + Shelly.getDeviceInfo().id);
 // });
 `
 	
-	err = os.WriteFile("main.js", []byte(exampleJS), 0644)
-	if err != nil {
-		fmt.Printf("⚠️  Warning: Could not create main.js file: %v\n", err)
+	mainJSExists := false
+	if _, err := os.Stat("main.js"); err == nil {
+		mainJSExists = true
+		fmt.Printf("ℹ️  main.js already exists - preserving your code\n")
+	} else if os.IsNotExist(err) {
+		err = os.WriteFile("main.js", []byte(exampleJS), 0644)
+		if err != nil {
+			fmt.Printf("⚠️  Warning: Could not create main.js file: %v\n", err)
+		}
+	} else {
+		fmt.Printf("⚠️  Warning: Could not check main.js file: %v\n", err)
 	}
 	
 	fmt.Printf("✅ Project initialized successfully!\n")
 	fmt.Printf("📄 Created .spgtty config file\n")
-	fmt.Printf("📄 Created main.js example file\n")
+	if !mainJSExists {
+		fmt.Printf("📄 Created main.js example file\n")
+	}
 	fmt.Printf("📁 Created dist/ directory\n")
 	fmt.Printf("\n🚀 Ready to build! Run: spgtty build\n")
 	
