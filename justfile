@@ -15,6 +15,9 @@ test:
 
 try:
     @echo "🚀 Trying spgtty in isolated workspace..."
+    @echo "📋 Version info:"
+    /Users/ludal/src/github.com/GrosseBen/spgtty/spgtty -v
+    @echo ""
     bash -c "cd try && /Users/ludal/src/github.com/GrosseBen/spgtty/spgtty init --device shellyplus1pm-demo && /Users/ludal/src/github.com/GrosseBen/spgtty/spgtty build && echo '📄 Build output:' && cat dist/main.js"
 
 clean:
