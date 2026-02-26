@@ -21,6 +21,11 @@ so that you could upload it to Shally Gen2+ Device`,
 }
 
 func build(cmd *cobra.Command, args []string) {
+	// Validate configuration before proceeding
+	if err := validateConfig(); err != nil {
+		log.Fatalf("❌ Configuration error: %v", err)
+	}
+
 	var scriptName string
 	if len(args) == 0 {
 		args = append(args, "main.js")
@@ -46,4 +51,9 @@ func build(cmd *cobra.Command, args []string) {
 	log.Printf("✅ Code nach %s geschrieben (%d Bytes)\n", outPath+scriptName, len(code))
 	fmt.Printf("Building script from: %s\n", scriptName)
 	fmt.Printf("Minimizing: %t\n", !notMinimizeFlagValue) // Zeigt an, ob minimiert wird
+	fmt.Printf("Device: %s\n", config.Device)
+	if config.IP != "" {
+		fmt.Printf("IP: %s\n", config.IP)
+	}
+	fmt.Printf("Script ID: %d\n", config.ScriptID)
 }

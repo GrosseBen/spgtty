@@ -10,7 +10,7 @@ import (
 func version(cmd *cobra.Command, args []string) error {
 	versionFlag, err := cmd.PersistentFlags().GetBool("version")
 	if err != nil {
-		log.Fatalf("Fehler beim Abrufen des 'version'-Flags: %w", err)
+		log.Fatalf("Fehler beim Abrufen des 'version'-Flags: %v", err)
 	}
 	if versionFlag {
 		utils.PrintVersion()
