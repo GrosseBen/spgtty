@@ -1,0 +1,15 @@
+# Build output
+dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Optional: Uncomment to ignore local config (if it contains secrets)
+# .spgtty.yaml

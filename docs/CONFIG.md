@@ -19,7 +19,7 @@ Settings are loaded in this order (later overrides earlier):
 ```yaml
 # Shelly device settings
 shelly:
-  host: "192.168.1.100"    # IP or hostname of Shelly device
+  host: "192.168.33.1"     # IP or hostname of Shelly device
   script_id: 1             # Script slot (1-10)
 
 # Build settings
@@ -50,7 +50,7 @@ All config keys can be set via environment variables with `SPGTTY_` prefix:
 |----------|------------|---------|
 | `SPGTTY_SHELLY_HOST` | `shelly.host` | `192.168.1.100` |
 | `SPGTTY_SHELLY_SCRIPT_ID` | `shelly.script_id` | `1` |
-| `SPGTTY_BUILD_ENTRY` | `build.entry` | `src/main.js` |
+| `SPGTTY_BUILD_ENTRY` | `build.entry` | `main.js` |
 | `SPGTTY_BUILD_OUTPUT` | `build.output` | `dist/app.js` |
 | `SPGTTY_BUILD_MINIFY` | `build.minify` | `true` |
 

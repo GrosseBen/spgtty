@@ -40,12 +40,42 @@ spgtty/
 └── .opencode/           # AI agent context
 ```
 
+## User Project Structure (Convention)
+
+When you run `spgtty init`, it creates this structure:
+
+```
+my-shelly-project/
+├── .spgtty.yaml      # Configuration (set your Shelly IP here)
+├── main.js           # Entry point (ALWAYS in root!)
+├── dist/             # Build output (git-ignored)
+│   └── main.js       # Bundled script for Shelly
+└── .gitignore
+```
+
+### Convention: `main.js` in Root
+
+**spgtty expects `main.js` in the project root.** This is a fixed convention:
+
+- Simple and intuitive for Shelly projects
+- No configuration needed - just run `spgtty`
+- For helper modules, create additional `.js` files and use imports:
+  ```javascript
+  // main.js
+  import { helper } from "./utils.js";
+  ```
+
+If you need a different entry point, specify it explicitly:
+```bash
+spgtty build other-entry.js
+```
+
 ## Dependencies
 
 | Package | Purpose | Version |
 |---------|---------|---------|
 | `github.com/spf13/cobra` | CLI framework | v1.10.2 |
-| `github.com/spf13/viper` | Configuration (planned) | v1.18+ |
+| `github.com/spf13/viper` | Configuration | v1.21+ |
 | `github.com/evanw/esbuild` | JavaScript bundler | v0.27.2 |
 
 ## Data Flow

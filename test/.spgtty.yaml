@@ -1,0 +1,13 @@
+# spgtty configuration
+# Documentation: https://github.com/GrosseBen/spgtty
+
+# Shelly device settings
+shelly:
+  host: "192.168.33.1" # IP or hostname of your Shelly device (e.g., "192.168.1.100")
+  script_id: 1 # Script slot on the device (1-10)
+
+# Build settings
+build:
+  entry: "main.js" # Entry point file
+  output: "dist/main.js" # Output file path
+  minify: true # Enable minification (set to false for debugging)

@@ -47,9 +47,16 @@ spgtty -o dist/output.js
 | `--notMinimize` | `-m` | Disable minification | `false` |
 | `--output` | `-o` | Output file path | `dist/main.js` |
 
+### Convention: `main.js` in Root
+
+**spgtty expects `main.js` in the project root.** This is a fixed convention:
+- No configuration needed - just run `spgtty`
+- Simple and intuitive for Shelly projects
+- For a different entry point, specify it explicitly: `spgtty build other.js`
+
 ### What it does
 
-1. Reads the entry file (default: `main.js`)
+1. Reads the entry file (default: `main.js` in project root)
 2. Resolves all imports and bundles into single file
 3. Transpiles to ES2015 (Shelly-compatible)
 4. Minifies (unless `-m` flag)
