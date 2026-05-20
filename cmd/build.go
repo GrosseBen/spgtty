@@ -4,56 +4,53 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/GrosseBen/spgtty/pkg/builder"
 	"github.com/spf13/cobra"
 )
 
 var buildCmd = &cobra.Command{
-	Use:   "build",
-	Short: "Translates your js code in a Spagetty monster for Shally devices",
-	Long: `To enabele development fo more compley Js aplications for Shally devices
+	Use:   "build [file]",
+	Short: "Translates your JS code into a Spagetty monster for Shelly devices",
+	Long: `To enable development of more complex JS applications for Shelly devices,
 
-spgtty is a CLI tool that empowers developers to bundle complex, multifile applications, minmised and bundeld to one Fiel.
-so that you could upload it to Shally Gen2+ Device`,
+spgtty is a CLI tool that empowers developers to bundle complex, multifile applications,
+minified and bundled to one file, so that you can upload it to Shelly Gen2+ devices.`,
 	Args: cobra.MaximumNArgs(1),
 	Run:  build,
 }
 
 func build(cmd *cobra.Command, args []string) {
-	// Validate configuration before proceeding
-	if err := validateConfig(); err != nil {
-		log.Fatalf("❌ Configuration error: %v", err)
+	// Determine input file
+	entryFile := "main.js"
+	if len(args) > 0 {
+		entryFile = args[0]
 	}
 
-	var scriptName string
-	if len(args) == 0 {
-		args = append(args, "main.js")
-	}
-	var err error
-	scriptName = args[len(args)-1]
-	outPath := "./dist/"
-	code, err := builder.BuildShellyScript(args[0], !notMinimizeFlagValue)
+	// Output path: always dist/<filename>
+	outDir := "./dist/"
+	outFile := filepath.Base(entryFile) // Extract just the filename
+	outPath := filepath.Join(outDir, outFile)
+
+	// Build the script
+	minify := !notMinimizeFlagValue
+	code, err := builder.BuildShellyScript(entryFile, minify)
 	if err != nil {
-		log.Fatalf("Bulild failed %v ", err)
+		log.Fatalf("Build failed: %v", err)
 	}
 
-	// 2. Optional: In Datei schreiben
-	err = os.MkdirAll(outPath, 0755) // Stelle sicher, dass das dist-Verzeichnis existiert
-	if err != nil {
-		log.Fatalf("❌ Fehler beim Erstellen des dist-Verzeichnisses: %v ", err)
-	}
-	err = os.WriteFile(outPath+scriptName, code, 0644)
-	if err != nil {
-		log.Fatalf("❌ Fehler beim Schreiben der Datei: %v", err)
+	// Ensure dist directory exists
+	if err := os.MkdirAll(outDir, 0755); err != nil {
+		log.Fatalf("❌ Failed to create dist directory: %v", err)
 	}
 
-	log.Printf("✅ Code nach %s geschrieben (%d Bytes)\n", outPath+scriptName, len(code))
-	fmt.Printf("Building script from: %s\n", scriptName)
-	fmt.Printf("Minimizing: %t\n", !notMinimizeFlagValue) // Zeigt an, ob minimiert wird
-	fmt.Printf("Device: %s\n", config.Device)
-	if config.IP != "" {
-		fmt.Printf("IP: %s\n", config.IP)
+	// Write output file
+	if err := os.WriteFile(outPath, code, 0644); err != nil {
+		log.Fatalf("❌ Failed to write output file: %v", err)
 	}
-	fmt.Printf("Script ID: %d\n", config.ScriptID)
+
+	log.Printf("✅ Code written to %s (%d bytes)\n", outPath, len(code))
+	fmt.Printf("Entry: %s\n", entryFile)
+	fmt.Printf("Minified: %t\n", minify)
 }

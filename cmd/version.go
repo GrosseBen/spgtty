@@ -1,20 +1,21 @@
 package cmd
 
 import (
-	"github.com/GrosseBen/spgtty/pkg/utils"
-	"github.com/spf13/cobra"
 	"log"
 	"os"
+
+	"github.com/GrosseBen/spgtty/pkg/utils"
+	"github.com/spf13/cobra"
 )
 
 func version(cmd *cobra.Command, args []string) error {
 	versionFlag, err := cmd.PersistentFlags().GetBool("version")
 	if err != nil {
-		log.Fatalf("Fehler beim Abrufen des 'version'-Flags: %v", err)
+		log.Fatalf("Error getting 'version' flag: %v", err)
 	}
 	if versionFlag {
 		utils.PrintVersion()
-		os.Exit(0) // Beendet das Programm, nachdem die Version angezeigt wurde
+		os.Exit(0)
 	}
 
 	return err

@@ -2,3 +2,6 @@
 /try/dist/
 /try/.spgtty
 spgtty
+
+# Local development data
+.beads/
